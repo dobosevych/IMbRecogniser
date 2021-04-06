@@ -3,6 +3,7 @@ import pygame
 import os
 from generator.creator import Creator, ScreenFiller
 from generator.noiser import RotationNoiser
+from generator.noiser import SaltAndPepperNoiser
 from generator.placer import Placer
 from generator.sampler import Sampler
 import pandas as pd
@@ -18,7 +19,8 @@ def generate(size=10, folder="../data/"):
     pygame.init()
     screen = pygame.display.set_mode((256, 32))
     generator = Creator()
-    noiser = RotationNoiser()
+    rotationNoiser = RotationNoiser()
+    saltAndPapperNoiser = SaltAndPepperNoiser()
     placer = Placer()
     filler = ScreenFiller()
 
@@ -26,7 +28,8 @@ def generate(size=10, folder="../data/"):
     for i, sequence in enumerate(tqdm(Sampler(size))):
         screen = filler(screen)
         img = generator(sequence)
-        img = noiser(img)
+        img = rotationNoiser(img)
+        img = saltAndPapperNoiser(img)
         screen = placer(screen, img)
         filename = f"img{i}.jpg"
         pygame.image.save(screen, os.path.join(folder, filename))
