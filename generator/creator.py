@@ -23,7 +23,7 @@ class ScreenFiller:
 
 class Creator:
     FONT_NAME = "USPSIMBStandard"
-    FONT_SIZE = 16
+    FONT_SIZE = 15
 
     def __init__(self, color_range=(0, 127), color_distortion=0.03, font_distortion=0.15):
         self.color_range = color_range

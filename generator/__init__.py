@@ -26,7 +26,7 @@ def generate(size=10, folder="../data/"):
     for i, sequence in enumerate(tqdm(Sampler(size))):
         screen = filler(screen)
         img = generator(sequence)
-        img = noiser(img)
+        #img = noiser(img)
         screen = placer(screen, img)
         filename = f"img{i}.jpg"
         pygame.image.save(screen, os.path.join(folder, filename))
