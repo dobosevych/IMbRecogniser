@@ -2,6 +2,10 @@
 
 Simple Intelligent Mail Barcode recogniser
 
+## Team
+
+Pavlo Berezin, Oles Dobosevych, Nataliia Vakulenko
+
 ## Modules
 
 - [generator](./generator/README.md) creates synthetic dataset
