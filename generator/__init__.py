@@ -3,6 +3,7 @@ import pygame
 import os
 from generator.creator import Creator, ScreenFiller
 from generator.noiser import RotationNoiser
+from generator.noiser import SaltAndPepperNoiser
 from generator.placer import Placer
 from generator.sampler import NumberSampler, BarcodeSampler
 import pandas as pd
@@ -19,6 +20,7 @@ def generate_barcodes(size=10, folder="../data/"):
     screen = pygame.display.set_mode((256, 32))
     generator = Creator()
     noiser = RotationNoiser()
+    saltAndPepperNoiser = SaltAndPepperNoiser()
     placer = Placer()
     filler = ScreenFiller()
 
@@ -27,6 +29,7 @@ def generate_barcodes(size=10, folder="../data/"):
         screen = filler(screen)
         img = generator(sequence)
         #img = noiser(img)
+        img = saltAndPepperNoiser(img)
         screen = placer(screen, img)
         filename = f"img{i}.jpg"
         pygame.image.save(screen, os.path.join(folder, filename))
