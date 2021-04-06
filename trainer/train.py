@@ -10,32 +10,35 @@ import os
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-batch_size = 1
+batch_size = 128
 trainset = IMbDataset("data.csv", "data/", transform=transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)
 
-#device = "cuda:0"
-device = "cpu"
+device = "cuda:0"
+#device = "cpu"
 
 model = CRNN().to(device)
-criterion = nn.CTCLoss(reduction='sum')
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+criterion = nn.CTCLoss(reduction='mean').cuda()
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 for epoch in range(100):
     running_loss = 0.0
     for i, data in enumerate(tqdm(trainloader)):
         inputs, labels = data
-        input_lengths = torch.full(size=(inputs.shape[0],), fill_value=189, dtype=torch.long)
-        target_lengths = torch.full(size=(inputs.shape[0],), fill_value=65, dtype=torch.long)
+        input_lengths = torch.full(size=(inputs.shape[0],), fill_value=189, dtype=torch.int32)
+        target_lengths = torch.full(size=(inputs.shape[0],), fill_value=65, dtype=torch.int32)
+        labels = torch.flatten(labels)
+        labels = labels.type(torch.long)
         optimizer.zero_grad()
         inputs, labels, input_lengths, target_lengths = inputs.to(device), labels.to(device), input_lengths.to(device), target_lengths.to(device)
-        #print(labels)
         outputs = model(inputs)
-        #print(outputs.shape)
+        print(outputs)
+        #print(inputs)
+        #print(labels)
+        #print(input_lengths)
+        #print(target_lengths)
+
         loss = criterion(outputs, labels, input_lengths, target_lengths)
-        arg_maxes = torch.argmax(outputs, dim=2)
-        print(list(arg_maxes.numpy()))
-        #print(list(arg_maxes.numpy()))
         loss.backward()
         optimizer.step()
 

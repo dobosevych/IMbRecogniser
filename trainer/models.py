@@ -38,5 +38,5 @@ class CRNN(nn.Module):
         out = F.relu(out)
         out = out.reshape(-1, batch_size, self.gru_input_size)
         out, _ = self.gru(out)
-        out = torch.stack([F.log_softmax(self.fc(out[i]), dim=-1) for i in range(out.shape[0])])
+        out = torch.stack([F.softmax(self.fc(out[i]), dim=-1) for i in range(out.shape[0])])
         return out

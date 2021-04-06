@@ -8,7 +8,7 @@ def color_cutter(color):
 
 
 class ScreenFiller:
-    def __init__(self, color_range=(240, 255), color_distortion=0.03, ):
+    def __init__(self, color_range=(240, 255), color_distortion=0.03):
         self.color_range = color_range
         self.color_distortion = color_distortion
 

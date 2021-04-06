@@ -1,12 +1,13 @@
 import torch
 from torchvision.transforms import transforms
 from tqdm import tqdm
-
+import os
 from trainer.dataset import IMbDataset
 from trainer.models import CRNN
 
 model = CRNN()
-model.load_state_dict(torch.load("models/model_epoch_40.pth", map_location=torch.device('cpu')))
+print(os.listdir("models/"))
+model.load_state_dict(torch.load("models/model_epoch_32.pth", map_location=torch.device('cpu')))
 model.eval()
 batch_size = 1
 transform = transforms.Compose(
@@ -21,6 +22,7 @@ for i, data in enumerate(tqdm(trainloader)):
     #    continue
     inputs, labels = data
     outputs = model(inputs)
+    print(labels)
     #print(outputs)
     arg_maxes = torch.argmax(outputs, dim=2)
     print(arg_maxes.shape)
