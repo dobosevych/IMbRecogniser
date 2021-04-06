@@ -20,7 +20,7 @@ class CRNN(nn.Module):
         self.gru_input_size = self.cnn_output_height * 32
         self.gru = nn.GRU(self.gru_input_size, self.gru_hidden_size, self.gru_num_layers,
                           batch_first=True, bidirectional=True)
-        self.fc = nn.Linear(self.gru_hidden_size * 2, num_classes)
+        self.fc = nn.Linear(self.gru_hidden_size * 2, num_classes + 1)
 
     def forward(self, x):
         batch_size = x.shape[0]

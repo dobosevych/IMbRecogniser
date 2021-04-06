@@ -10,12 +10,12 @@ import os
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-batch_size = 128
+batch_size = 1
 trainset = IMbDataset("data.csv", "data/", transform=transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)
 
-device = "cuda:0"
-#device = "cpu"
+#device = "cuda:0"
+device = "cpu"
 
 model = CRNN().to(device)
 criterion = nn.CTCLoss(reduction='sum')
@@ -29,11 +29,13 @@ for epoch in range(100):
         target_lengths = torch.full(size=(inputs.shape[0],), fill_value=65, dtype=torch.long)
         optimizer.zero_grad()
         inputs, labels, input_lengths, target_lengths = inputs.to(device), labels.to(device), input_lengths.to(device), target_lengths.to(device)
-
+        #print(labels)
         outputs = model(inputs)
         #print(outputs.shape)
         loss = criterion(outputs, labels, input_lengths, target_lengths)
-        #print(outputs.shape)
+        arg_maxes = torch.argmax(outputs, dim=2)
+        print(list(arg_maxes.numpy()))
+        #print(list(arg_maxes.numpy()))
         loss.backward()
         optimizer.step()
 
